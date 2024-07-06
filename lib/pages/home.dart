@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'dart:typed_data';
@@ -21,6 +23,29 @@ class _HomeState extends State<Home> {
   ];
 
 
+  Future<List<Status>> getStatuses() async{
+    List<Status> status_list = [];
+    Response response = await get(Uri.parse('http://192.168.0.15/status_list'));
+    Map data = jsonDecode(response.body);
+
+    data['name'].asMap().forEach((index, truck_name){
+      status_list.add(Status(driver: 'Roljohn Torres', pallet_num: data['number_of_boxes'][index].toString(),
+          profit: data['profit'][index].toString(),
+          delivery_date: data['date_of_delivery'][index].toString(),
+          percent: '${data['load_percentage'][index]}%'));
+    });
+
+    print(status_list);
+
+    return status_list;
+  }
+  void setStatusList() async{
+    statuses = await getStatuses();
+    setState(() {
+
+    });
+  }
+
   Future<void> fetchImage() async {
     Response response = await  get(Uri.parse('http://192.168.0.15/weekly_profit'));
     if (response.statusCode == 200) {
@@ -36,6 +61,7 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     fetchImage();
+    setStatusList();
   }
 
 
@@ -188,7 +214,7 @@ class _HomeState extends State<Home> {
                     backgroundColor: Colors.transparent, // Set the button color to transparent
                     shadowColor: Colors.transparent, // Hide the shadow
                   ),
-                  onPressed: () {Navigator.pushNamed(context, '/history');},
+                  onPressed: () {setStatusList(); Navigator.pushNamed(context, '/history');},
                   child: Text("")
                 )),
             Positioned(

@@ -263,7 +263,7 @@ class _ShipState extends State<Ship> {
                             child: IconButton(
                               icon: Image.asset('assets/save_button.png'),
                               onPressed: ()async {
-                                var url = Uri.parse('http://192.168.0.15/update_list');
+                                var url = Uri.parse('http://192.168.0.15/ship');
                                 var headers = <String, String>{
                                   'Content-Type': 'application/json', // Adjust content type based on your API requirements
                                 };
