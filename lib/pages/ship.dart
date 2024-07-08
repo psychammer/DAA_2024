@@ -16,7 +16,7 @@ class Ship extends StatefulWidget {
 }
 
 class _ShipState extends State<Ship> {
-  int weightCapacity = 200;
+  int weightCapacity = 1000;
 
   double totalProfit = 0;
   double totalWeight = 0;
@@ -261,7 +261,7 @@ class _ShipState extends State<Ship> {
                         Padding(
                             padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                             child: IconButton(
-                              icon: Image.asset('assets/save_button.png'),
+                              icon: Image.asset('assets/ship.png'),
                               onPressed: ()async {
                                 var url = Uri.parse('http://192.168.0.15/ship');
                                 var headers = <String, String>{
@@ -285,8 +285,6 @@ class _ShipState extends State<Ship> {
                                   print('POST request failed: $e');
                                 }
 
-                                setState(() {
-                                });
 
                                 Navigator.pop(context);
                               },

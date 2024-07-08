@@ -17,9 +17,10 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   late Uint8List imageData = Uint8List(0);
 
+
   List<Status> statuses= [
-    Status(driver:'Roljohn P. Torres', pallet_num: '9', profit: '452', delivery_date: '05/11/2024', percent: '80%'),
-    Status(driver:'Roljohn P. Torres', pallet_num: '9', profit: '452', delivery_date: '05/11/2024', percent: '80%')
+    // Status(driver:'Roljohn P. Torres', pallet_num: '9', profit: '452', delivery_date: '05/11/2024', percent: '80%'),
+    // Status(driver:'Roljohn P. Torres', pallet_num: '9', profit: '452', delivery_date: '05/11/2024', percent: '80%')
   ];
 
 
@@ -28,11 +29,12 @@ class _HomeState extends State<Home> {
     Response response = await get(Uri.parse('http://192.168.0.15/status_list'));
     Map data = jsonDecode(response.body);
 
-    data['name'].asMap().forEach((index, truck_name){
+    data['driver'].asMap().forEach((index, truck_name){
       status_list.add(Status(driver: 'Roljohn Torres', pallet_num: data['number_of_boxes'][index].toString(),
           profit: data['profit'][index].toString(),
           delivery_date: data['date_of_delivery'][index].toString(),
-          percent: '${data['load_percentage'][index]}%'));
+          percent: '${data['load_percentage'][index]}%',
+          name: data['truck_id'][index].toString()));
     });
 
     print(status_list);
@@ -138,6 +140,7 @@ class _HomeState extends State<Home> {
                     Padding(padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 20), child: IconButton(
                       icon: Image.asset('assets/pallet.png'),
                       onPressed: () async {
+                        setStatusList();
                         Navigator.pushNamed(context, '/item');
                       },
                       highlightColor: Colors.yellow,
@@ -146,6 +149,7 @@ class _HomeState extends State<Home> {
                     Padding(padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 20), child: IconButton(
                       icon: Image.asset('assets/truck.png'),
                       onPressed: () async {
+                        setStatusList();
                         Navigator.pushNamed(context, '/history');
                       },
                       highlightColor: Colors.yellow,
@@ -158,7 +162,7 @@ class _HomeState extends State<Home> {
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 24),
                     child: IconButton(
                       icon: Image.asset('assets/ship.png'),
-                      onPressed: (){Navigator.pushNamed(context, '/ship');},
+                      onPressed: (){Navigator.pushNamed(context, '/ship').then((result){ setStatusList();});},
                       highlightColor: Colors.yellow,
                       hoverColor: Colors.transparent,
                     )
@@ -179,11 +183,7 @@ class _HomeState extends State<Home> {
                 Column(
                   children: statuses.map((status)=> StatusCard(
                       status: status,
-                      delete: (){
-                        setState(() {
-                          statuses.remove(status);
-                        });
-                      })).toList(),
+                      )).toList(),
                 ),
 
                 SizedBox(
@@ -226,7 +226,7 @@ class _HomeState extends State<Home> {
                     backgroundColor: Colors.transparent, // Set the button color to transparent
                     shadowColor: Colors.transparent, // Hide the shadow
                   ),
-                  onPressed: () {Navigator.pushNamed(context, '/item');},
+                  onPressed: () {setStatusList(); Navigator.pushNamed(context, '/item');},
                   child: Text(""),
                 ))
           ],
@@ -236,3 +236,8 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
+
+
+
+

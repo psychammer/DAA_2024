@@ -6,6 +6,7 @@ import 'package:apps/pages/item.dart';
 import 'package:apps/pages/history.dart';
 import 'package:apps/pages/add_item.dart';
 import 'package:apps/pages/ship.dart';
+import 'package:apps/pages/box_status.dart';
 
 void main()=> runApp(MaterialApp(
   initialRoute: '/',
@@ -16,7 +17,9 @@ void main()=> runApp(MaterialApp(
     '/item':(context) => Item(),
     '/history':(context) => History(),
     '/add_item':(context) => AddItem(),
-      '/ship':(context) => Ship()
+      '/ship':(context) => Ship(),
+    '/view_details': (context) => BoxStatus()
+
   }
 ));
 
